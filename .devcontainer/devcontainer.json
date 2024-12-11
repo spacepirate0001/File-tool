@@ -1,0 +1,50 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+{
+	"name": "File-tool Dockerfile",
+	"build": {
+		// Sets the run context to one level up instead of the .devcontainer folder.
+		"context": "..",
+		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
+		"dockerfile": "../Dockerfile"
+	},
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "workspaceFolder": "/workspace",
+    
+    // Add development tools
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ryanluker.vscode-coverage-gutters"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "python.testing.pytestEnabled": true,
+                "python.testing.unittestEnabled": false,
+                "python.testing.nosetestsEnabled": false,
+                "python.testing.pytestArgs": [
+                    "tests"
+                ],
+                "python.formatting.provider": "black",
+                "python.linting.enabled": true,
+                "editor.formatOnSave": true
+            }
+        }
+	}
+	
+    // Install additional dependencies for development
+    // "postCreateCommand": "poetry install --with dev"
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "devcontainer"
+}

@@ -1,0 +1,18 @@
+Source: file-tool
+Maintainer: Haytham Amin <haythamelmogazy@gmail.com>
+Section: python
+Priority: optional
+Build-Depends: python3-setuptools, python3-all, debhelper (>= 9)
+Standards-Version: 3.9.6
+
+Package: file-tool
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, python3 (>= 3.8)
+Description: CLI tool for file operations
+ A command-line utility that provides tools for common file operations:
+  * Create files (empty or with content)
+  * Copy files
+  * Combine files into one
+  * Delete files
+ .
+ Features include error handling and complete test coverage.
