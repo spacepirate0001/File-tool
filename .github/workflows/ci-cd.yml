@@ -14,6 +14,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
 
@@ -24,23 +25,19 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+      
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
       
       - name: Install Poetry
         run: |
+          python -m pip install --upgrade pip
           pip install poetry==${{ env.POETRY_VERSION }}
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
-      
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
       
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --with dev
       
       - name: Run tests
@@ -61,38 +58,33 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
-          cache: 'pip'
+      
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-lint-${{ hashFiles('**/poetry.lock') }}
       
       - name: Install Poetry
         run: |
+          python -m pip install --upgrade pip
           pip install poetry==${{ env.POETRY_VERSION }}
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
-      
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-lint-${{ hashFiles('**/poetry.lock') }}
       
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --with dev
       
-      - name: Run black
-        run: poetry run black --check src tests
-      
-      - name: Run isort
-        run: poetry run isort --check-only src tests
-      
-      - name: Run mypy
-        run: poetry run mypy src
+      - name: Lint
+        run: |
+          poetry run black --check src tests
+          poetry run isort --check-only src tests
+          poetry run mypy src
 
   build-and-release:
     needs: [test, lint]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
     
     steps:
       - uses: actions/checkout@v4
@@ -103,23 +95,19 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
-          cache: 'pip'
       
       - name: Install Poetry and build dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install poetry==${{ env.POETRY_VERSION }}
-          poetry config virtualenvs.create true
-          poetry config virtualenvs.in-project true
           sudo apt-get update
           sudo apt-get install -y python3-stdeb dh-python
       
-      - name: Build Python package
-        run: poetry build
-      
-      - name: Build Debian package
+      - name: Build packages
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           poetry version $VERSION
+          poetry build
           py2dsc-deb dist/*.tar.gz
           mv deb_dist/*.deb dist/
       
@@ -136,6 +124,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
+      # Uncomment when ready to publish to PyPI
       # - name: Publish to PyPI
       #   if: success()
       #   env:
