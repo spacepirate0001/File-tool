@@ -145,7 +145,7 @@ If you prefer not to use Dev Containers, you can develop locally:
 ```bash
 git clone https://github.com/yourusername/file-tool.git
 cd file-tool
-poetry instal
+poetry install
 ```
 
 ### Testing

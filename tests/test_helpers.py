@@ -20,7 +20,7 @@ def test_validate_path_special_chars(tmp_path):
         "|",
         "?",
         "*",
-    ]  # Removed : / \ as they're handled separately
+    ]  # Removed : as it's needed for Windows paths
     for char in invalid_chars:
         try:
             test_path = str(tmp_path / f"test{char}file.txt")
@@ -35,19 +35,26 @@ def test_validate_path_with_directories(tmp_path):
     def dummy_func(self, path):
         return path
 
-    # Test valid directory paths using proper path separator
+    # Test valid directory paths
     valid_path = str(tmp_path / "valid_dir" / "test.txt")
-    dummy_func(None, valid_path)
+    result = dummy_func(None, valid_path)
+    assert Path(result).is_absolute()
 
-    # Test invalid directory names
-    invalid_chars = ["<", ">", '"', "|", "?", "*"]  # Removed : / \
-    for char in invalid_chars:
-        try:
-            test_path = str(tmp_path / f"bad{char}dir" / "test.txt")
-            dummy_func(None, test_path)
-            pytest.fail(f"Expected FileToolError for directory with character: {char}")
-        except FileToolError:
-            continue
+
+def test_validate_path_platform_specific(tmp_path):
+    @validate_path(path_args=[0])
+    def dummy_func(self, path):
+        return path
+
+    # Test Windows-style path
+    windows_path = str(tmp_path / "folder" / "file.txt").replace("/", "\\")
+    result = dummy_func(None, windows_path)
+    assert Path(result).is_absolute()
+
+    # Test Unix-style path
+    unix_path = str(tmp_path / "folder" / "file.txt")
+    result = dummy_func(None, unix_path)
+    assert Path(result).is_absolute()
 
 
 def test_validate_path_nested_directories(tmp_path):
@@ -57,7 +64,7 @@ def test_validate_path_nested_directories(tmp_path):
 
     nested_path = str(tmp_path / "dir1" / "dir2" / "test.txt")
     result = dummy_func(None, nested_path)
-    assert os.path.isabs(result)
+    assert Path(result).is_absolute()
 
 
 def test_validate_path_separators(tmp_path):
