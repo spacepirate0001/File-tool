@@ -25,7 +25,7 @@ class FileOperations:
                     f.write(content)
         except OSError as e:
             raise FileToolError(f"Failed to create file: {e}")
-        
+
     @validate_path(path_args=[0, 1])
     def copy_file(self, source: str, destination: str) -> None:
         """Copy a file to a new location."""
@@ -74,4 +74,4 @@ class FileOperations:
         try:
             file_path.unlink()
         except OSError as e:
-            raise FileToolError(f"Failed to delete file: {e}")    
+            raise FileToolError(f"Failed to delete file: {e}")
