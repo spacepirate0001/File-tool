@@ -12,6 +12,10 @@ A command-line tool for common file operations.
 ## Project Structure
 ```
 file-tool/
+├── debian/
+│   ├── control           # Package metadata
+│   ├── copyright        # License information
+│   └── changelog        # Version history
 ├── src/
 │   ├── operations/
 │   │   ├── __pycache__/
