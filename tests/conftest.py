@@ -1,10 +1,13 @@
-import pytest
 import shutil
+
+import pytest
+
 
 @pytest.fixture
 def temp_dir(tmp_path):
     """Provide a temporary directory."""
     return tmp_path
+
 
 @pytest.fixture
 def sample_file(temp_dir):
@@ -13,12 +16,14 @@ def sample_file(temp_dir):
     file_path.write_text("Sample content\n")
     return file_path
 
+
 @pytest.fixture
 def empty_file(temp_dir):
     """Create an empty file."""
     file_path = temp_dir / "empty.txt"
     file_path.touch()
     return file_path
+
 
 @pytest.fixture(autouse=True)
 def cleanup_after_test(tmp_path):

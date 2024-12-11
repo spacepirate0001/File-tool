@@ -1,19 +1,22 @@
 import click
 from rich.console import Console
+
 from src.operations.file_operations import FileOperations
 from src.utils.exceptions import FileToolError
 
 console = Console()
 file_ops = FileOperations()
 
+
 @click.group()
 def cli():
     """File manipulation tool for common operations."""
     pass
 
+
 @cli.command()
-@click.argument('path')
-@click.option('--content', '-c', help='Content to write to the file')
+@click.argument("path")
+@click.option("--content", "-c", help="Content to write to the file")
 def create(path: str, content: str | None):
     """Create a new file with optional content."""
     try:
@@ -23,9 +26,10 @@ def create(path: str, content: str | None):
         console.print(f"[red]Error: {str(e)}[/red]")
         raise click.Abort()
 
+
 @cli.command()
-@click.argument('source')
-@click.argument('destination')
+@click.argument("source")
+@click.argument("destination")
 def copy(source: str, destination: str):
     """Copy a file to a new location."""
     try:
@@ -35,10 +39,11 @@ def copy(source: str, destination: str):
         console.print(f"[red]Error: {str(e)}[/red]")
         raise click.Abort()
 
+
 @cli.command()
-@click.argument('first')
-@click.argument('second')
-@click.argument('output')
+@click.argument("first")
+@click.argument("second")
+@click.argument("output")
 def combine(first: str, second: str, output: str):
     """Combine two files into a third file."""
     try:
@@ -48,8 +53,9 @@ def combine(first: str, second: str, output: str):
         console.print(f"[red]Error: {str(e)}[/red]")
         raise click.Abort()
 
+
 @cli.command()
-@click.argument('path')
+@click.argument("path")
 def delete(path: str):
     """Delete a file."""
     try:
@@ -59,5 +65,6 @@ def delete(path: str):
         console.print(f"[red]Error: {str(e)}[/red]")
         raise click.Abort()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     cli()
