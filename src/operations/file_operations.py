@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from src.utils.exceptions import FileToolError
-from src.utils.helpers import validate_path
+from ..utils.exceptions import FileToolError  # Use relative import
+from ..utils.helpers import validate_path
 
 
 class FileOperations:
