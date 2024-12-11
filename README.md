@@ -18,7 +18,6 @@ file-tool/
 │   └── changelog        # Version history
 ├── src/
 │   ├── operations/
-│   │   ├── __pycache__/
 │   │   └── file_operations.py    # Core file operation implementations
 │   ├── utils/
 │   │   ├── exceptions.py         # Custom exceptions
@@ -42,10 +41,10 @@ file-tool/
 
 ## Installation
 
-### Using Poetry (Recommended)
-1. Install Poetry if you haven't already:
+### Using Pip (Recommended)
+1. Install using Pip:
    ```bash
-   pip install poetry
+   pip install file-tool
    ```
 
 2. Clone and install:
