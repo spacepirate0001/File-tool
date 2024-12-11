@@ -2,7 +2,7 @@
 name = "file-tool"
 version = "0.1.0"
 description = "A CLI tool for common file operations"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["Haytham Amin <haythamelmogazy@gmail.com>"]
 readme = "README.md"
 packages = [{include = "src"}]
 
@@ -55,9 +55,7 @@ exclude_lines = [
 show_missing = true
 fail_under = 80
 
-[
-tool.mypy
-]
+[tool.mypy]
 python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
@@ -74,9 +72,7 @@ mypy_path = "src"
 explicit_package_bases = true
 namespace_packages = true
 
-[[
-tool.mypy.overrides
-]]
+[[tool.mypy.overrides]]
 module = "tests.*"
 ignore_missing_imports = true
 check_untyped_defs = true
