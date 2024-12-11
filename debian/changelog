@@ -1,0 +1,8 @@
+file-tool (0.1.0) unstable; urgency=medium
+
+  * Initial release.
+    - Basic file operations implemented
+    - Complete test coverage
+    - Error handling
+
+ -- Haytham Amin <haythamelmogazy@gmail.com>  Wed, 11 Dec 2024 00:00:00 +0000
