@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "file-tool"
-version = "0.1.1"
+version = "0.1.0"
 description = "A CLI tool for common file operations"
 authors = ["Haytham Amin <haythamelmogazy@gmail.com>"]
 readme = "README.md"

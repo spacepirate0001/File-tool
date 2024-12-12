@@ -132,25 +132,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-stdeb dh-python upx
 
-      - name: Build Python packages
-        run: |
-          # Update version
-          if [[ "$GITHUB_REF" =~ ^refs/tags/v([0-9]+(\.[0-9]+)*([-a-zA-Z0-9\.]*)?)$ ]]; then
-            VERSION=${BASH_REMATCH[1]}
-            echo "Extracted version: $VERSION"
-            poetry version $VERSION
-          else
-            echo "Invalid version format in GITHUB_REF: $GITHUB_REF"
-            exit 1
-          fi
-          
-          # Build source distribution and wheel
-          poetry build
-          
-          # Debug output
-          echo "Contents of dist directory:"
-          ls -la dist/
-          
           - name: Build Debian package
           run: |
             # Pre-install toml for stdeb
@@ -163,25 +144,25 @@ jobs:
         
             # Create Debian package
             mkdir -p deb_dist
-            py2dsc-deb dist/*.tar.gz
+            py2dsc-deb dist/*.tar.gz || exit 1
         
             # Replace rules file for pybuild
-            cp debian/rules deb_dist/tmp_py2dsc/file_tool-*/debian/
+            cp debian/rules deb_dist/tmp_py2dsc/file_tool-*/debian/ || exit 1
         
             # Build .deb package using dpkg-buildpackage
-            cd deb_dist/tmp_py2dsc/file_tool-*
-            dpkg-buildpackage -us -uc -b
+            cd deb_dist/tmp_py2dsc/file_tool-* || exit 1
+            dpkg-buildpackage -us -uc -b || exit 1
             cd ../../../
         
             # Debug output
             echo "Contents of deb_dist directory:"
-            ls -la deb_dist/
+            ls -la deb_dist/ || exit 1
         
             # Move .deb files to dist
-            find deb_dist -name "*.deb" -exec cp {} dist/ \;
+            find deb_dist -name "*.deb" -exec cp {} dist/ \; || exit 1
         
             echo "Final contents of dist directory:"
-            ls -la dist/
+            ls -la dist/ || exit 1
           
       - name: Build Executable
         run: |
