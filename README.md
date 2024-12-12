@@ -53,7 +53,20 @@ file-tool/
 ## Installation
 
 ### Using Poetry
-1. Clone and install:
+1. Install Poetry:
+   ```bash
+   curl -sSL https://install.python-poetry.org | python3 -
+   ```
+2. Verify Poetry Installation:
+   ```bash
+   poetry --version
+   ```
+   Should see
+   ```bash
+   Poetry (version 1.x.x)
+   ```
+
+2. Clone and install:
    ```bash
    git clone https://github.com/yourusername/file-tool.git
    cd file-tool
