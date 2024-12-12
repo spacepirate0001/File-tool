@@ -52,13 +52,8 @@ file-tool/
 
 ## Installation
 
-### Using Pip (Recommended)
-1. Install using Pip:
-   ```bash
-   pip install file-tool
-   ```
-
-2. Clone and install:
+### Using Poetry
+1. Clone and install:
    ```bash
    git clone https://github.com/yourusername/file-tool.git
    cd file-tool
@@ -96,9 +91,14 @@ docker build -t file-tool .
 ## Usage
 
 ### After Installation
-Once installed, you can run commands directly:
+Once installed using Poetry, you can run commands directly:
 ```bash
 file-tool [command] [options]
+```
+
+If using Executable:
+```bash
+./file-tool [command] [options]
 ```
 
 If using Docker:
