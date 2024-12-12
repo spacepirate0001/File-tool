@@ -42,10 +42,12 @@ jobs:
   sonarqube:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
+    # Add this to ensure job only runs when we have necessary permissions
+    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Important for SonarCloud to get full SCM history
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -65,9 +67,12 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate in SonarCloud account
+        with:
+          args: >
+            -Dsonar.organization=spacepirate0001
+            -Dsonar.projectKey=spacepirate0001_file-tool
 
   test:
     runs-on: ubuntu-latest
