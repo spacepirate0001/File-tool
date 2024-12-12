@@ -66,7 +66,7 @@ file-tool/
    ```
 
 ### Using Prebuilt Executables
-You can download the prebuilt standalone executable for Linux from the [releases](https://github.com/spacepriate0001/file-tool/releases/latest):
+You can download the prebuilt standalone executable for Linux from the [releases](https://github.com/spacepirate0001/file-tool/releases):
 
 1. Download the tarball:
    ```bash
@@ -75,7 +75,7 @@ You can download the prebuilt standalone executable for Linux from the [releases
 
 2. Extract the tarball:
    ```bash
-   tar -xzf file-tool-v0.1.1-linux-x64.tar.gz
+   tar -xzf file-tool-v0.1.2-linux-x64.tar.gz
    ```
 
 3. Make sure file is executable:
