@@ -139,9 +139,10 @@ jobs:
 
       - name: Build Python packages
         run: |
-          # Update version
+          # Extract version from tag
           if [[ "$GITHUB_REF" =~ ^refs/tags/v([0-9]+(\.[0-9]+)*([-a-zA-Z0-9\.]*)?)$ ]]; then
             VERSION=${BASH_REMATCH[1]}
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
             echo "Extracted version: $VERSION"
             poetry version $VERSION
           else
@@ -152,19 +153,26 @@ jobs:
           # Build source distribution and wheel
           poetry build
           
-          # Debug output
+          # Verify built packages
           echo "Contents of dist directory:"
           ls -la dist/
-          
+          for f in dist/*; do
+            echo "Verifying $f"
+            pip install twine
+            twine check "$f"
+          done
+      
       - name: Build Executable
         run: |
-          # Build standalone executable
+          mkdir -p artifacts
           poetry run pyinstaller file-tool.spec --clean
           
-          # Create tarball of the executable
           cd dist
-          tar -czf file-tool-${{ github.ref_name }}-linux-x64.tar.gz file-tool
+          tar -czf ../artifacts/file-tool-${VERSION}-linux-x64.tar.gz file-tool
           cd ..
+          
+          echo "Executable artifacts:"
+          ls -la artifacts/
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -172,6 +180,7 @@ jobs:
           files: |
             dist/*.whl
             dist/*.tar.gz
+            artifacts/*.tar.gz
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -183,4 +192,5 @@ jobs:
         with:
           verbose: true
           print-hash: true
+          packages-dir: dist
           repository-url: https://pypi.org/p/file-tool-sai
