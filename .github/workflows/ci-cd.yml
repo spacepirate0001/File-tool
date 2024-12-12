@@ -153,6 +153,9 @@ jobs:
           
       - name: Build Debian package
         run: |
+          # Pre-install toml for stdeb
+          pip install toml
+
           # Create Debian package
           mkdir -p deb_dist
           py2dsc-deb dist/*.tar.gz
