@@ -6,11 +6,68 @@ on:
     tags: [ "v*" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: '30 1 * * 0'  # Run security scan weekly at 1:30 AM on Sunday  
 
 env:
   POETRY_VERSION: "1.7.1"
 
 jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'python' ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+  sonarqube:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry==${{ env.POETRY_VERSION }}
+          poetry install --no-interaction --with dev
+      
+      - name: Run tests with coverage
+        run: |
+          poetry run pytest --cov=src --cov-report=xml --cov-report=term-missing
+      
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -96,20 +153,36 @@ jobs:
         with:
           python-version: "3.12"
       
-      - name: Install Poetry and build dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install poetry==${{ env.POETRY_VERSION }}
+          pip install poetry2setup
           sudo apt-get update
-          sudo apt-get install -y python3-stdeb dh-python
+          sudo apt-get install -y python3-stdeb dh-python upx
       
-      - name: Build packages
+      - name: Prepare for build
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           poetry version $VERSION
+          poetry2setup > setup.py
+      
+      - name: Build packages
+        run: |
+          # Build Python packages
           poetry build
-          py2dsc-deb dist/*.tar.gz
-          mv deb_dist/*.deb dist/
+          
+          # Create debian package
+          mkdir -p deb_dist
+          py2dsc-deb --with-python3=True dist/*.tar.gz
+          find deb_dist -name "*.deb" -exec cp {} dist/ \;
+          
+          # Build standalone executable
+          poetry run pyinstaller file-tool.spec --clean
+          # Create tarball of the executable
+          cd dist
+          tar -czf file-tool-${{ github.ref_name }}-linux-x64.tar.gz file-tool
+          cd ..
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -118,6 +191,7 @@ jobs:
             dist/*.whl
             dist/*.tar.gz
             dist/*.deb
+            dist/file-tool-${{ github.ref_name }}-linux-x64.tar.gz
           draft: false
           prerelease: false
           generate_release_notes: true

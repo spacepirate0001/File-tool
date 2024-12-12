@@ -1,6 +1,15 @@
 # file-tool
 A command-line tool for common file operations.
 
+[![CI/CD](https://github.com/spacepirate0001/file-tool/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/spacepirate0001/file-tool/actions/workflows/ci-cd.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spacepirate0001_file-tool&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spacepirate0001_file-tool)
+[![codecov](https://codecov.io/github/spacepirate0001/file-tool/graph/badge.svg?token=1442N8DE8H)](https://codecov.io/github/spacepirate0001/file-tool)
+[![Python Versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://github.com/spacepirate0001/file-tool)
+[![License](https://img.shields.io/github/license/spacepirate0001/file-tool)](https://github.com/spacepirate0001/file-tool/blob/main/LICENSE)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+
 ## Features
 - Create files (empty or with content)
 - Copy files

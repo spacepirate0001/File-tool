@@ -2,17 +2,37 @@ Source: file-tool
 Maintainer: Haytham Amin <haythamelmogazy@gmail.com>
 Section: python
 Priority: optional
-Build-Depends: python3-setuptools, python3-all, debhelper (>= 9)
-Standards-Version: 3.9.6
+Build-Depends: python3-setuptools,
+               python3-all (>= 3.10),
+               debhelper-compat (= 13),
+               dh-python
+Standards-Version: 4.6.2
+Homepage: https://github.com/spacepirate0001/file-tool
+Vcs-Git: https://github.com/spacepirate0001/file-tool.git
+Vcs-Browser: https://github.com/spacepirate0001/file-tool
+Rules-Requires-Root: no
 
 Package: file-tool
 Architecture: all
-Depends: ${python3:Depends}, ${misc:Depends}, python3 (>= 3.8)
-Description: CLI tool for file operations
- A command-line utility that provides tools for common file operations:
-  * Create files (empty or with content)
-  * Copy files
-  * Combine files into one
-  * Delete files
+Depends: ${python3:Depends},
+         ${misc:Depends},
+         python3 (>= 3.10)
+Provides: ${python3:Provides}
+Description: Command-line tool for file operations
+ A powerful and user-friendly command-line utility that provides
+ a set of tools for common file operations. It is designed to be
+ simple to use while providing robust error handling and safety
+ checks.
  .
- Features include error handling and complete test coverage.
+ Features:
+  * Create files (empty or with content)
+  * Copy files with path validation
+  * Combine multiple files into one
+  * Safe file deletion with checks
+  * Unicode support for file names
+  * Comprehensive error handling
+  * Path validation and sanitization
+ .
+ The tool is designed for both interactive use and scripting,
+ with clear error messages and consistent behavior across
+ different environments.
