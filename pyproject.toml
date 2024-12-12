@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "file-tool"
+name = "file-tool-sai"
 version = "0.1.0"
 description = "A CLI tool for common file operations"
 authors = ["Haytham Amin <haythamelmogazy@gmail.com>"]
