@@ -135,8 +135,14 @@ jobs:
       - name: Build Python packages
         run: |
           # Update version
-          VERSION=${GITHUB_REF#refs/tags/v}
-          poetry version $VERSION
+          if [[ "$GITHUB_REF" =~ ^refs/tags/v([0-9]+(\.[0-9]+)*([-a-zA-Z0-9\.]*)?)$ ]]; then
+            VERSION=${BASH_REMATCH[1]}
+            echo "Extracted version: $VERSION"
+            poetry version $VERSION
+          else
+            echo "Invalid version format in GITHUB_REF: $GITHUB_REF"
+            exit 1
+          fi
           
           # Build source distribution and wheel
           poetry build
