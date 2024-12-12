@@ -63,10 +63,17 @@ jobs:
           poetry run pytest --cov=src --cov-report=xml --cov-report=term-missing
       
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v1
+        with:
+          args: >
+            -Dsonar.host.url=https://sonarcloud.io
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: "https://sonarcloud.io"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Additional SonarCloud-specific settings
+          SONAR_ORGANIZATION: "spacepirate0001"
+          SONAR_PROJECT_KEY: "spacepirate0001_file-tool"
 
   test:
     runs-on: ubuntu-latest
