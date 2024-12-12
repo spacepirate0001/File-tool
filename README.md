@@ -70,12 +70,12 @@ You can download the prebuilt standalone executable for Linux from the [releases
 
 1. Download the tarball:
    ```bash
-   wget https://github.com/yourusername/file-tool/releases/download/v0.1.2/file-tool-v0.1.2-linux-x64.tar.gz
+   wget https://github.com/yourusername/file-tool/releases/download/v0.1.3/file-tool-v0.1.3-linux-x64.tar.gz
    ```
 
 2. Extract the tarball:
    ```bash
-   tar -xzf file-tool-v0.1.2-linux-x64.tar.gz
+   tar -xzf file-tool-v0.1.3-linux-x64.tar.gz
    ```
 
 3. Make sure file is executable:
