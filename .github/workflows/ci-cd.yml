@@ -96,20 +96,63 @@ jobs:
         with:
           python-version: "3.12"
       
-      - name: Install Poetry and build dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install poetry==${{ env.POETRY_VERSION }}
+          pip install poetry2setup setuptools wheel
           sudo apt-get update
-          sudo apt-get install -y python3-stdeb dh-python
-      
-      - name: Build packages
+          sudo apt-get install -y python3-stdeb dh-python upx
+
+      - name: Generate setup.py
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           poetry version $VERSION
+          poetry2setup > setup.py
+          # Ensure setup.py is executable
+          chmod +x setup.py
+          # Debug output
+          echo "Content of setup.py:"
+          cat setup.py
+          
+      - name: Build Python packages
+        run: |
+          # Build source distribution
           poetry build
-          py2dsc-deb dist/*.tar.gz
-          mv deb_dist/*.deb dist/
+          
+          # Debug output
+          echo "Contents of dist directory:"
+          ls -la dist/
+          
+      - name: Build Debian package
+        run: |
+          # Create temporary directory
+          mkdir -p deb_dist
+          
+          # Copy setup.py to source directory
+          cp setup.py dist/
+          
+          # Build Debian package
+          cd dist
+          python3 setup.py --command-packages=stdeb.command bdist_deb
+          cd ..
+          
+          # Move .deb files to dist directory
+          find deb_dist -name "*.deb" -exec cp {} dist/ \;
+          
+          # Debug output
+          echo "Final contents of dist directory:"
+          ls -la dist/
+          
+      - name: Build Executable
+        run: |
+          # Build standalone executable
+          poetry run pyinstaller file-tool.spec --clean
+          
+          # Create tarball of the executable
+          cd dist
+          tar -czf file-tool-${{ github.ref_name }}-linux-x64.tar.gz file-tool
+          cd ..
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -118,14 +161,15 @@ jobs:
             dist/*.whl
             dist/*.tar.gz
             dist/*.deb
+            dist/file-tool-${{ github.ref_name }}-linux-x64.tar.gz
           draft: false
           prerelease: false
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Publish to PyPI
-        if: success()
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish
+      # - name: Publish to PyPI
+      #   if: success()
+      #   env:
+      #     POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+      #   run: poetry publish
