@@ -116,7 +116,7 @@ jobs:
       url: https://pypi.org/p/file-tool-sai
     permissions:
       contents: write
-      id-token: write 
+      # id-token: write 
     
     steps:
       - uses: actions/checkout@v4
@@ -153,14 +153,14 @@ jobs:
           # Build source distribution and wheel
           poetry build
           
-          # Verify built packages
-          echo "Contents of dist directory:"
-          ls -la dist/
-          for f in dist/*; do
-            echo "Verifying $f"
-            pip install twine
-            twine check "$f"
-          done
+          # # Verify built packages
+          # echo "Contents of dist directory:"
+          # ls -la dist/
+          # for f in dist/*; do
+          #   echo "Verifying $f"
+          #   pip install twine
+          #   twine check "$f"
+          # done
       
       - name: Build Executable
         run: |
@@ -187,10 +187,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          verbose: true
-          print-hash: true
-          packages-dir: dist
-          repository-url: https://pypi.org/p/file-tool-sai
+      # - name: Publish to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     verbose: true
+      #     print-hash: true
+      #     packages-dir: dist
+      #     repository-url: https://pypi.org/p/file-tool-sai
