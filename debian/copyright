@@ -1,8 +1,0 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: file-tool
-Upstream-Contact: Haytham Amin <haythamelmogazy@gmail.com>
-Source: https://github.com/spacepirate0001/file-tool
-
-Files: *
-Copyright: 2024 Haytham Amin <haythamelmogazy@gmail.com>
-License: GPL-3.0+

@@ -42,8 +42,10 @@ file-tool/
 ├── Dockerfile
 ├── LICENSE
 ├── README.md
+├── file-tool.spec
 ├── poetry.lock
 ├── pyproject.toml
+├── sonar-project.properties
 ├── requirements.txt
 └── requirements-dev.txt
 ```
@@ -60,7 +62,30 @@ file-tool/
    ```bash
    git clone https://github.com/yourusername/file-tool.git
    cd file-tool
-   poetry install
+   poetry install --with dev
+   ```
+
+### Using Prebuilt Executables
+You can download the prebuilt standalone executable for Linux from the [releases](https://github.com/spacepriate0001/file-tool/releases/latest):
+
+1. Download the tarball:
+   ```bash
+   wget https://github.com/yourusername/file-tool/releases/download/v0.1.2/file-tool-v0.1.2-linux-x64.tar.gz
+   ```
+
+2. Extract the tarball:
+   ```bash
+   tar -xzf file-tool-v0.1.1-linux-x64.tar.gz
+   ```
+
+3. Make sure file is executable:
+   ```bash
+   chmod +x file-tool
+   ```
+
+4. Run the executable:
+   ```bash
+   ./file-tool
    ```
 
 ### Using Docker
@@ -71,7 +96,7 @@ docker build -t file-tool .
 ## Usage
 
 ### After Installation
-Once installed with Poetry, you can run commands directly:
+Once installed, you can run commands directly:
 ```bash
 file-tool [command] [options]
 ```
