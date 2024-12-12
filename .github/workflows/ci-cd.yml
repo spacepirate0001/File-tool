@@ -152,38 +152,6 @@ jobs:
           echo "Contents of dist directory:"
           ls -la dist/
           
-          # - name: Build Debian package
-          # run: |
-          #   # Pre-install toml for stdeb
-          #   pip install toml
-        
-          #   # Create a debian/rules file for pybuild
-          #   mkdir -p debian
-          #   echo -e "%:\n\tdh \$@ --with python3 --buildsystem=pybuild" > debian/rules
-          #   chmod +x debian/rules
-        
-          #   # Create Debian package
-          #   mkdir -p deb_dist
-          #   py2dsc-deb dist/*.tar.gz
-        
-          #   # Replace rules file for pybuild
-          #   cp debian/rules deb_dist/tmp_py2dsc/file_tool-*/debian/
-        
-          #   # Build .deb package using dpkg-buildpackage
-          #   cd deb_dist/tmp_py2dsc/file_tool-*
-          #   dpkg-buildpackage -us -uc -b
-          #   cd ../../../
-        
-          #   # Debug output
-          #   echo "Contents of deb_dist directory:"
-          #   ls -la deb_dist/
-        
-          #   # Move .deb files to dist
-          #   find deb_dist -name "*.deb" -exec cp {} dist/ \;
-        
-          #   echo "Final contents of dist directory:"
-          #   ls -la dist/
-          
       - name: Build Executable
         run: |
           # Build standalone executable
@@ -200,8 +168,6 @@ jobs:
           files: |
             dist/*.whl
             dist/*.tar.gz
-            dist/*.deb
-            dist/file-tool-${{ github.ref_name }}-linux-x64.tar.gz
           draft: false
           prerelease: false
           generate_release_notes: true
