@@ -5,6 +5,7 @@ description = "A CLI tool for common file operations"
 authors = ["Haytham Amin <haythamelmogazy@gmail.com>"]
 readme = "README.md"
 packages = [{include = "src"}]
+include = ["setup.py"]  # Ensure setup.py is included in the distribution
 
 [tool.poetry.scripts]
 file-tool = "src.main:cli"
