@@ -46,6 +46,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -67,13 +73,12 @@ jobs:
         with:
           args: >
             -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.organization=spacepirate0001
+            -Dsonar.projectKey=spacepirate0001_file-tool
+            -Dsonar.java.binaries=.
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: "https://sonarcloud.io"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Additional SonarCloud-specific settings
-          SONAR_ORGANIZATION: "spacepirate0001"
-          SONAR_PROJECT_KEY: "spacepirate0001_file-tool"
 
   test:
     runs-on: ubuntu-latest
