@@ -128,24 +128,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install poetry==${{ env.POETRY_VERSION }}
-          pip install poetry2setup setuptools wheel
+          pip install stdeb
           sudo apt-get update
           sudo apt-get install -y python3-stdeb dh-python upx
 
-      - name: Generate setup.py
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          poetry version $VERSION
-          poetry2setup > setup.py
-          # Ensure setup.py is executable
-          chmod +x setup.py
-          # Debug output
-          echo "Content of setup.py:"
-          cat setup.py
-          
       - name: Build Python packages
         run: |
-          # Build source distribution
+          # Update version
+          VERSION=${GITHUB_REF#refs/tags/v}
+          poetry version $VERSION
+          
+          # Build source distribution and wheel
           poetry build
           
           # Debug output
@@ -154,21 +147,17 @@ jobs:
           
       - name: Build Debian package
         run: |
-          # Create temporary directory
+          # Create Debian package
           mkdir -p deb_dist
-          
-          # Copy setup.py to source directory
-          cp setup.py dist/
-          
-          # Build Debian package
-          cd dist
-          python3 setup.py --command-packages=stdeb.command bdist_deb
-          cd ..
-          
-          # Move .deb files to dist directory
-          find deb_dist -name "*.deb" -exec cp {} dist/ \;
+          py2dsc-deb dist/*.tar.gz
           
           # Debug output
+          echo "Contents of deb_dist directory:"
+          ls -la deb_dist/
+          
+          # Move .deb files to dist
+          find deb_dist -name "*.deb" -exec cp {} dist/ \;
+          
           echo "Final contents of dist directory:"
           ls -la dist/
           
