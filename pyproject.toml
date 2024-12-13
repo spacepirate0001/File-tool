@@ -41,11 +41,9 @@ python_files = ["test_*.py"]
 [tool.coverage.run]
 source = ["src"]
 branch = true
-command_line = "-m pytest"
-omit = [
-    "tests/*",
-    "**/__init__.py",
-]
+parallel = true
+data_file = ".coverage"
+relative_files = true
 
 [tool.coverage.report]
 exclude_lines = [
@@ -62,6 +60,11 @@ fail_under = 80
 
 [tool.coverage.xml]
 output = ".coverage-reports/coverage-python.xml"
+
+[tool.coverage.paths]
+source = [
+    "src"
+]
 
 [tool.mypy]
 python_version = "3.10"
