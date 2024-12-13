@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 
 from src.operations.file_operations import FileOperations
 from src.utils.exceptions import FileToolError
@@ -118,3 +119,105 @@ def test_combine_files_to_nonexistent_directory(file_ops, tmp_path):
     file_ops.combine_files(str(first_file), str(second_file), str(output_path))
     assert output_path.exists()
     assert output_path.read_text() == "first content\nsecond content\n"
+
+
+def test_copy_file_destination_exists(file_ops, tmp_path):
+    """Test copying when destination already exists"""
+    source_path = tmp_path / "source.txt"
+    dest_path = tmp_path / "dest.txt"
+
+    # Create source and destination files
+    source_path.write_text("source content")
+    dest_path.write_text("original content")
+
+    # Copy should overwrite destination
+    file_ops.copy_file(str(source_path), str(dest_path))
+    assert dest_path.read_text() == "source content"
+
+
+def test_copy_file_source_not_found(file_ops, tmp_path):
+    """Test copying non-existent source file"""
+    source_path = tmp_path / "nonexistent.txt"
+    dest_path = tmp_path / "dest.txt"
+
+    with pytest.raises(FileToolError, match="Source file not found"):
+        file_ops.copy_file(str(source_path), str(dest_path))
+
+
+def test_copy_file_permission_error(file_ops, tmp_path, monkeypatch):
+    """Test copying with permission error"""
+    source_path = tmp_path / "source.txt"
+    dest_path = tmp_path / "dest.txt"
+    source_path.write_text("test content")
+
+    def mock_write_bytes(*args, **kwargs):
+        raise OSError("Permission denied")
+
+    monkeypatch.setattr(Path, "write_bytes", mock_write_bytes)
+
+    with pytest.raises(FileToolError, match="Failed to copy file"):
+        file_ops.copy_file(str(source_path), str(dest_path))
+
+
+def test_combine_files_first_file_not_found(file_ops, tmp_path):
+    """Test combining with missing first file"""
+    first_path = tmp_path / "nonexistent.txt"
+    second_path = tmp_path / "second.txt"
+    output_path = tmp_path / "output.txt"
+
+    second_path.write_text("second content")
+
+    with pytest.raises(FileToolError, match="First file not found"):
+        file_ops.combine_files(str(first_path), str(second_path), str(output_path))
+
+
+def test_combine_files_second_file_not_found(file_ops, tmp_path):
+    """Test combining with missing second file"""
+    first_path = tmp_path / "first.txt"
+    second_path = tmp_path / "nonexistent.txt"
+    output_path = tmp_path / "output.txt"
+
+    first_path.write_text("first content")
+
+    with pytest.raises(FileToolError, match="Second file not found"):
+        file_ops.combine_files(str(first_path), str(second_path), str(output_path))
+
+
+def test_combine_files_permission_error(file_ops, tmp_path, monkeypatch):
+    """Test combining with write permission error"""
+    first_path = tmp_path / "first.txt"
+    second_path = tmp_path / "second.txt"
+    output_path = tmp_path / "output.txt"
+
+    first_path.write_text("first content")
+    second_path.write_text("second content")
+
+    def mock_open(*args, **kwargs):
+        raise OSError("Permission denied")
+
+    monkeypatch.setattr(Path, "open", mock_open)
+
+    with pytest.raises(FileToolError, match="Failed to combine files"):
+        file_ops.combine_files(str(first_path), str(second_path), str(output_path))
+
+
+def test_delete_nonexistent_file(file_ops, tmp_path):
+    """Test deleting a nonexistent file"""
+    file_path = tmp_path / "nonexistent.txt"
+
+    with pytest.raises(FileToolError, match="File not found"):
+        file_ops.delete_file(str(file_path))
+
+
+def test_delete_file_permission_error(file_ops, tmp_path, monkeypatch):
+    """Test delete with permission error"""
+    file_path = tmp_path / "test.txt"
+    file_path.write_text("test content")
+
+    def mock_unlink(*args, **kwargs):
+        raise OSError("Permission denied")
+
+    monkeypatch.setattr(Path, "unlink", mock_unlink)
+
+    with pytest.raises(FileToolError, match="Failed to delete file"):
+        file_ops.delete_file(str(file_path))
