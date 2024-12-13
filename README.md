@@ -1,6 +1,7 @@
 # file-tool
 A command-line tool for common file operations.
 
+[![Latest Release](https://img.shields.io/github/v/release/spacepirate0001/file-tool?sort=semver)](https://github.com/spacepirate0001/file-tool/releases/latest)
 [![CI/CD](https://github.com/spacepirate0001/file-tool/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/spacepirate0001/file-tool/actions/workflows/ci-cd.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=spacepirate0001_file-tool&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=spacepirate0001_file-tool)
 [![codecov](https://codecov.io/github/spacepirate0001/file-tool/graph/badge.svg?token=1442N8DE8H)](https://codecov.io/github/spacepirate0001/file-tool)
@@ -78,12 +79,12 @@ You can download the prebuilt standalone executable for Linux from the [releases
 
 1. Download the tarball:
    ```bash
-   wget https://github.com/spacepirate0001/file-tool/releases/download/v0.1.3/file-tool-0.1.3-linux-x64.tar.gz
+   wget https://github.com/spacepirate0001/file-tool/releases/download/latest/file-tool-latest-linux-x64.tar.gz
    ```
 
 2. Extract the tarball:
    ```bash
-   tar -xzf file-tool-0.1.3-linux-x64.tar.gz
+   tar -xzf file-tool-latest-linux-x64.tar.gz
    ```
 
 3. Make sure file is executable:
