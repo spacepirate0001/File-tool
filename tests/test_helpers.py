@@ -117,6 +117,7 @@ def test_validate_path_with_multiple_args():
     result = dummy_func(None, "test1.txt", "test2.txt", "not a path")
     assert len(result) == 3
 
+
 # tests/test_helpers.py
 def test_validate_path_with_invalid_parent_directory(tmp_path):
     @validate_path(path_args=[0])
@@ -129,6 +130,7 @@ def test_validate_path_with_invalid_parent_directory(tmp_path):
     assert os.path.isabs(result)
     parent_dir = os.path.dirname(result)
     assert os.path.exists(parent_dir)
+
 
 def test_validate_path_with_non_string_argument():
     @validate_path(path_args=[0])

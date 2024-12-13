@@ -84,6 +84,7 @@ def test_create_file_in_nested_directory(file_ops, tmp_path):
     assert nested_path.exists()
     assert nested_path.read_text() == "content"
 
+
 # tests/test_file_operations.py
 def test_create_file_when_parent_dir_doesnt_exist(file_ops, tmp_path):
     nested_path = tmp_path / "nonexistent_dir" / "test.txt"
@@ -92,16 +93,18 @@ def test_create_file_when_parent_dir_doesnt_exist(file_ops, tmp_path):
     assert nested_path.exists()
     assert nested_path.read_text() == content
 
+
 def test_copy_file_to_nonexistent_directory(file_ops, tmp_path):
     # Create source file
     source_file = tmp_path / "source.txt"
     source_file.write_text("test content")
-    
+
     # Try to copy to a nonexistent directory
     dest_path = tmp_path / "new_dir" / "dest.txt"
     file_ops.copy_file(str(source_file), str(dest_path))
     assert dest_path.exists()
     assert dest_path.read_text() == "test content"
+
 
 def test_combine_files_to_nonexistent_directory(file_ops, tmp_path):
     # Create source files
@@ -109,7 +112,7 @@ def test_combine_files_to_nonexistent_directory(file_ops, tmp_path):
     second_file = tmp_path / "second.txt"
     first_file.write_text("first content\n")
     second_file.write_text("second content\n")
-    
+
     # Try to combine into a file in a nonexistent directory
     output_path = tmp_path / "new_dir" / "combined.txt"
     file_ops.combine_files(str(first_file), str(second_file), str(output_path))

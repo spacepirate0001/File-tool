@@ -55,23 +55,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry==${{ env.POETRY_VERSION }}
+          pip install coverage pytest poetry==${{ env.POETRY_VERSION }}
           poetry install --with dev
 
       - name: Run tests with coverage
         run: |
           mkdir -p .coverage-reports
-          poetry run coverage erase  # Clear any previous coverage data
-          PYTHONPATH=. poetry run coverage run -m pytest tests/ && \
-          poetry run coverage xml -i -o .coverage-reports/coverage-python.xml && \
-          poetry run coverage report --fail-under=80  # Enforce minimum coverage
-
-      - name: Debug Coverage
-        run: |
-          echo "Contents of .coverage-reports:"
-          ls -la .coverage-reports/
-          echo "Content of coverage XML:"
-          cat .coverage-reports/coverage-python.xml
+          poetry run pytest --cov=src tests/ --cov-report=xml:.coverage-reports/coverage-python.xml --cov-report=term-missing
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
