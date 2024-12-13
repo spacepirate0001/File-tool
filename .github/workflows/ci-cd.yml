@@ -62,8 +62,7 @@ jobs:
         run: |
           mkdir -p .coverage-reports
           poetry run coverage erase  # Clear any previous coverage data
-          poetry run coverage run -m pytest tests/ && \
-          poetry run coverage combine && \
+          PYTHONPATH=. poetry run coverage run -m pytest tests/ && \
           poetry run coverage xml -i -o .coverage-reports/coverage-python.xml && \
           poetry run coverage report --fail-under=80  # Enforce minimum coverage
 
