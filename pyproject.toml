@@ -44,6 +44,7 @@ omit = [
     "tests/*",
     "**/__init__.py",
 ]
+branch = true
 
 [tool.coverage.report]
 exclude_lines = [
@@ -57,6 +58,9 @@ exclude_lines = [
 ]
 show_missing = true
 fail_under = 80
+
+[tool.coverage.xml]
+output = "coverage.xml"
 
 [tool.mypy]
 python_version = "3.10"
