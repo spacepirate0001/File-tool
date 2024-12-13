@@ -75,16 +75,20 @@ file-tool/
    ```
 
 ### Using Prebuilt Executables
-You can download the prebuilt standalone executable for Linux from the [releases](https://github.com/spacepirate0001/file-tool/releases):
+You can download the prebuilt standalone executable for Linux from the [releases](https://github.com/spacepirate0001/file-tool/releases/latest):
 
-1. Download the tarball:
+1. Download the latest release:
    ```bash
-   wget https://github.com/spacepirate0001/file-tool/releases/download/latest/file-tool-latest-linux-x64.tar.gz
+   # Get the latest release
+   LATEST_VERSION=$(curl -s https://api.github.com/repos/spacepirate0001/file-tool/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+   
+   # Download the tarball
+   wget https://github.com/spacepirate0001/file-tool/releases/download/${LATEST_VERSION}/file-tool-${LATEST_VERSION#v}-linux-x64.tar.gz
    ```
 
 2. Extract the tarball:
    ```bash
-   tar -xzf file-tool-latest-linux-x64.tar.gz
+   tar -xzf file-tool-*-linux-x64.tar.gz
    ```
 
 3. Make sure file is executable:
