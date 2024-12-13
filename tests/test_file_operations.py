@@ -1,5 +1,6 @@
-import pytest
 from pathlib import Path
+
+import pytest
 
 from src.operations.file_operations import FileOperations
 from src.utils.exceptions import FileToolError
