@@ -61,9 +61,9 @@ jobs:
       - name: Run tests with coverage
         run: |
           mkdir -p .coverage-reports
-          coverage run -m pytest
-          coverage xml -i -o .coverage-reports/coverage-python.xml
-          coverage report
+          poetry run python -m coverage run -m pytest
+          poetry run coverage xml -i -o .coverage-reports/coverage-python.xml
+          poetry run coverage report
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
